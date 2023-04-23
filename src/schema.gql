@@ -9,20 +9,32 @@ input BaseGameInput {
   name: String!
 }
 
-input CreateUserInput {
-  email: String!
-  firstName: String!
-  lastName: String!
-  password: String!
+input BaseReservationInput {
+  dayFrom: DateTime!
+  dayTo: DateTime!
+  reservationType: String!
 }
 
-input EditUserInput {
-  email: String
+input CreateReservationInput {
+  dayFrom: DateTime!
+  dayTo: DateTime!
+  reservationType: String!
+  user: UserInput!
+}
+
+input CreateUserInput {
+  avatar: String
+  dateOfBirth: DateTime
+  email: String!
   firstName: String
-  games: [GameInput!]!
   lastName: String
   password: String
 }
+
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
 
 type Game {
   _id: ObjectId!
@@ -40,11 +52,13 @@ input GameInput {
 
 type Mutation {
   createGame(data: BaseGameInput!): Game!
+  createReservation(data: CreateReservationInput!): Reservation!
   createUser(data: CreateUserInput!): User!
   deleteGame(_id: String!): Game!
+  deleteReservation(_id: String!): Reservation!
   deleteUser(_id: String!): User!
   editGame(_id: String!, data: GameInput!): Game!
-  editUser(_id: String!, data: EditUserInput!): User!
+  editUser(_id: String!, data: BaseReservationInput!): Reservation!
   login(email: String!, password: String!): String!
 }
 
@@ -55,17 +69,39 @@ type Query {
   currentUser: User!
   game(_id: String!): Game!
   games: [Game!]!
+  reservation(_id: String!): Reservation!
+  reservations: [Reservation!]!
   user(_id: String!): User!
   users: [User!]!
 }
 
+type Reservation {
+  _id: ObjectId!
+  dayFrom: DateTime!
+  dayTo: DateTime!
+  reservationType: String!
+  user: User!
+}
+
 type User {
   _id: ObjectId!
+  avatar: String
+  dateOfBirth: DateTime
+  daysOff: Float!
   email: String!
   firstName: String!
-  games: [Game!]!
-  lastLogin: Float!
   lastName: String!
   password: String!
+  roles: [String!]!
+}
+
+input UserInput {
+  _id: ObjectId!
+  avatar: String
+  dateOfBirth: DateTime
+  email: String!
+  firstName: String
+  lastName: String
+  password: String
   roles: [String!]!
 }

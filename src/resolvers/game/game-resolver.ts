@@ -23,7 +23,7 @@ export class GameResolver {
     return newUser
   }
 
-  // @Authorized([UserRoles.ADMIN, UserRoles.SUPER_ADMIN])
+  //@Authorized([UserRoles.ADMIN, UserRoles.SUPER_ADMIN])
   @Mutation(returns => Game)
   async deleteGame(@Arg("_id") _id: string):Promise<Game> {
     return GameModel.findByIdAndRemove(_id);

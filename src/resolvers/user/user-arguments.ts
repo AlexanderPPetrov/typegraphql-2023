@@ -1,28 +1,11 @@
 import { MaxLength, MinLength, IsEmail } from "class-validator";
 import { Field, InputType } from "type-graphql";
-import { GameInput } from "../game/game-arguments";
-@InputType()
-export class CreateUserInput {
-  @Field()
-  @MaxLength(30)
-  firstName: string;
-
-  @Field()
-  @MaxLength(30)
-  lastName: string;
-
-  @Field()
-  @IsEmail()
-  email: string;
-
-  @Field()
-  @MinLength(6)
-  password: string;
-}
+import { ObjectId } from "mongoose";
+import { ObjectIdScalar } from "../../object-id.scalar";
 
 @InputType()
-export class EditUserInput {
-    
+export class BaseUserInput {
+
   @Field({nullable: true})
   @MaxLength(30)
   firstName?: string;
@@ -32,13 +15,28 @@ export class EditUserInput {
   lastName?: string;
 
   @Field({nullable: true})
-  @IsEmail()
-  email?: string;
-
-  @Field({nullable: true})
   @MinLength(6)
   password?: string;
   
-  @Field(type => [GameInput])
-  games?: GameInput[]
+  @Field({nullable: true})
+  dateOfBirth?: Date;
+
+  @Field({ nullable: true })
+  avatar?: string;
+}
+
+@InputType()
+export class CreateUserInput extends BaseUserInput {
+  @Field()
+  @IsEmail()
+  email: string;
+}
+
+@InputType()
+export class UserInput extends CreateUserInput {
+  @Field(type => ObjectIdScalar)
+  _id: ObjectId
+  
+  @Field(type => [String])
+  roles: string[]
 }

@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Arg, Authorized } from "type-graphql";
 import { User, UserModel } from "../../entities/user-entity";
-import { CreateUserInput, EditUserInput } from "./user-arguments";
+import { CreateUserInput, BaseUserInput } from "./user-arguments";
 import bcryptjs from "bcryptjs"
 import { UserRoles } from "./user-roles";
 
@@ -25,14 +25,14 @@ export class UserResolver {
     return newUser
   }
 
-  @Authorized([UserRoles.SUPER_ADMIN])
+  //@Authorized([UserRoles.SUPER_ADMIN])
   @Mutation(returns => User)
   async deleteUser(@Arg("_id") _id: string):Promise<User> {
     return UserModel.findByIdAndRemove(_id);
   }
 
   @Mutation(returns => User)
-  async editUser(@Arg("_id") _id: string, @Arg("data") data: EditUserInput):Promise<User> {
+  async editUser(@Arg("_id") _id: string, @Arg("data") data: BaseUserInput):Promise<User> {
     const userData = data.password ? {...data, password: bcryptjs.hashSync(data.password, 10)} : data
     return UserModel.findByIdAndUpdate(_id, userData, {new: true});
   }

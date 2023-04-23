@@ -1,16 +1,24 @@
-import { ObjectType, Field, Authorized } from "type-graphql";
+import { ObjectType, Field } from "type-graphql";
 import { prop as Prop, getModelForClass, modelOptions, Severity } from "@typegoose/typegoose"
 import { ObjectId } from "mongodb"
-import { Game } from "./game-entity";
 import { UserRoles } from "../resolvers/user/user-roles";
 
 @modelOptions({ options: { allowMixed: Severity.ALLOW } })
+
 
 @ObjectType()
 export class User {
 
   @Field()
   readonly _id: ObjectId;
+
+  @Prop({required: false})
+  @Field({nullable: true})
+  avatar?: string;
+
+  @Prop({required: false})
+  @Field({nullable: true})
+  dateOfBirth?: Date
 
   @Prop({required: true})
   @Field()
@@ -28,13 +36,9 @@ export class User {
   @Field()
   password: string;
 
+  @Prop({default: 20})
   @Field()
-  @Prop({default: Date.now()})
-  lastLogin?: number;
-
-  @Field(type => [Game])
-  @Prop({default: []})
-  games?: Game[]
+  daysOff?: number;
 
   @Field(type => [String])
   @Prop({default: [UserRoles.USER]})
