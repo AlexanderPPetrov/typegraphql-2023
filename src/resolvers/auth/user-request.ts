@@ -1,6 +1,6 @@
-import { User } from "../../entities/user-entity"
+import { User } from '../../entities/user-entity'
 
-declare module "express" { 
+declare module 'express' {
   export interface Request {
     user: User
   }

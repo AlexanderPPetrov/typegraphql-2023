@@ -1,12 +1,13 @@
-import { Resolver, Query, Mutation, Args, Ctx } from "type-graphql";
-import { ApolloServerErrorCode } from '@apollo/server/errors';
-import { GraphQLError } from 'graphql';
+import { Resolver, Query, Mutation, Args, Ctx } from 'type-graphql'
+import { ApolloServerErrorCode } from '@apollo/server/errors'
+import { GraphQLError } from 'graphql'
 
-import { User, UserModel } from "../../entities/user-entity";
-import bcryptjs from "bcryptjs"
-import { LoginArguments } from "./login-arguments";
-import { getToken } from "./token";
-import { Context } from "./context";
+import { User, UserModel } from '../entities/user-entity'
+import bcryptjs from 'bcryptjs'
+
+import { UserLoginArguments } from '../schema/user.schema'
+import { getToken } from './auth/token'
+import { Context } from '../types/context'
 @Resolver()
 export class AuthResolver {
 
@@ -18,22 +19,22 @@ export class AuthResolver {
         extensions: {
           code: 'UNAUTHENTICATED',
         },
-      });
+      })
     }
-    return UserModel.findById(ctx.user._id);
+    return UserModel.findById(ctx.user._id)
   }
 
 
   @Mutation(returns => String)
-  async login(@Args(){email, password}: LoginArguments) {
-    
-    const user = await UserModel.findOne({email})
+  async login(@Args(){ email, password }: UserLoginArguments) {
+
+    const user = await UserModel.findOne({ email })
     if(!user) {
       throw new GraphQLError('Wrong email or password', {
         extensions: {
           code: ApolloServerErrorCode.BAD_USER_INPUT,
         },
-      });
+      })
     }
     const isPasswordValid = await bcryptjs.compare(password, user.password)
 
@@ -42,11 +43,11 @@ export class AuthResolver {
         extensions: {
           code: ApolloServerErrorCode.BAD_USER_INPUT,
         },
-      });
+      })
     }
 
     user.lastLogin = Date.now()
-    await user.save();
+    await user.save()
     return getToken(user._id, user.roles)
   }
 
