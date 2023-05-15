@@ -1,4 +1,4 @@
-import { ArgsType, Field, Int, ObjectType } from 'type-graphql'
+import { ArgsType, ClassType, Field, Int, ObjectType } from 'type-graphql'
 import { IsInt, IsPositive } from 'class-validator'
 @ArgsType()
 export class PaginationInput {
@@ -13,11 +13,17 @@ export class PaginationInput {
       perPage: number
 }
 
-@ObjectType()
-export class PaginationResponse<T> {
-    @Field(() => Int)
-      total: number
+export default function PaginatedResponse<TItem>(TItemClass: ClassType<TItem>) {
+    @ObjectType()
+  abstract class PaginatedResponseClass {
+        @Field(type => [TItemClass])
+          items: TItem[]
 
-    @Field(() => [T])
-      items: T[]
+        @Field(type => Int)
+          total: number
+
+        @Field()
+          hasMore: boolean
+    }
+    return PaginatedResponseClass
 }

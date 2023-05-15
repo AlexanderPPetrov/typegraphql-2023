@@ -1,8 +1,8 @@
 import { Resolver, Query, Mutation, Arg, Authorized, Args } from 'type-graphql'
-import { User, CreateUserInput, EditUserInput } from '../schema/user.schema'
-import { UserRoles } from '../enums/user-roles'
+import { User, CreateUserInput, EditUserInput, PaginatedUserResponse } from '../schema/user.schema'
+import { UserRole } from '../enums/user-role'
 import { UserService } from '../services/user.service'
-import { PaginationInput, PaginationResponse } from '../schema/pagination.schema'
+import { PaginationInput } from '../schema/pagination.schema'
 import { ObjectId } from 'mongodb'
 
 @Resolver()
@@ -12,8 +12,8 @@ export class UserResolver {
     this.userService = new UserService()
   }
 
-  @Query(returns => [User])
-  async users(@Args()paginationInput : PaginationInput):Promise<PaginationResponse<User>> {
+  @Query(returns => PaginatedUserResponse)
+  async users(@Args()paginationInput : PaginationInput):Promise<PaginatedUserResponse> {
     return this.userService.getUsers(paginationInput)
   }
 
@@ -28,7 +28,7 @@ export class UserResolver {
     return this.userService.createUser(user)
   }
 
-  @Authorized([UserRoles.SUPER_ADMIN])
+  @Authorized([UserRole.SUPER_ADMIN])
   @Mutation(returns => User)
   async deleteUser(@Arg('_id') _id: ObjectId):Promise<User> {
     return this.userService.deleteUser(_id)

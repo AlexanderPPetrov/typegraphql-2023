@@ -1,8 +1,14 @@
-import { ObjectType, Field, InputType, ArgsType } from 'type-graphql'
-import { prop as Prop, getModelForClass } from '@typegoose/typegoose'
+import { ArgsType, Field, InputType, ObjectType, registerEnumType } from 'type-graphql'
+import { getModelForClass, prop as Prop } from '@typegoose/typegoose'
 import { ObjectId } from 'mongodb'
-import { UserRoles } from '../enums/user-roles'
-import { IsEmail, MaxLength, MinLength, IsNotEmpty } from 'class-validator'
+import { UserRole } from '../enums/user-role'
+import { IsEmail, IsNotEmpty, MaxLength, MinLength } from 'class-validator'
+import PaginatedResponse from './pagination.schema'
+
+
+registerEnumType(UserRole, {
+  name: 'UserRole',
+})
 
 @ObjectType()
 export class User {
@@ -26,10 +32,14 @@ export class User {
     @Field()
       password: string
 
-    @Field(type => [String])
-    @Prop({ default: [UserRoles.USER] })
-      roles?: string[]
+  @Field(() => [UserRole])
+  @Prop({ type: [String], enum: UserRole, default: [UserRole.USER] })
+    roles?: UserRole[]
+
 }
+
+@ObjectType()
+export class PaginatedUserResponse extends PaginatedResponse(User) {}
 
 export const UserModel = getModelForClass(User, { schemaOptions: { timestamps: true } })
 

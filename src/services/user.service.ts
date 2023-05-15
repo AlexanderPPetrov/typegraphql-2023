@@ -13,16 +13,16 @@ export class UserService {
 
   async getUsers({ page, perPage }: PaginationInput) {
     const skipCount = (page - 1) * perPage
-    const count = await UserModel.countDocuments()
-    const docs = await UserModel.find({}).skip(skipCount).limit(perPage).lean()
-    console.log(docs)
     const [total, items] = await Promise.all([
       UserModel.countDocuments(),
       UserModel.find({}).skip(skipCount).limit(perPage).lean(),
     ])
+    const hasMore = page * perPage < total
+
     return {
       total,
       items,
+      hasMore,
     }
   }
 

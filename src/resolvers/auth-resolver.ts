@@ -2,7 +2,7 @@ import { Resolver, Query, Mutation, Args, Ctx } from 'type-graphql'
 import { ApolloServerErrorCode } from '@apollo/server/errors'
 import { GraphQLError } from 'graphql'
 
-import { User, UserModel } from '../entities/user-entity'
+import { User, UserModel } from '../schema/user.schema'
 import bcryptjs from 'bcryptjs'
 
 import { UserLoginArguments } from '../schema/user.schema'
@@ -46,8 +46,6 @@ export class AuthResolver {
       })
     }
 
-    user.lastLogin = Date.now()
-    await user.save()
     return getToken(user._id, user.roles)
   }
 
