@@ -5,7 +5,7 @@ export class PaginationInput {
     @Field(() => Int)
     @IsInt()
     @IsPositive()
-      page: number
+      currentPage: number
 
     @Field(() => Int)
     @IsInt()
@@ -17,13 +17,16 @@ export default function PaginatedResponse<TItem>(TItemClass: ClassType<TItem>) {
     @ObjectType()
   abstract class PaginatedResponseClass {
         @Field(type => [TItemClass])
-          items: TItem[]
+          results: TItem[]
 
         @Field(type => Int)
           total: number
 
-        @Field()
-          hasMore: boolean
+        @Field(type => Int)
+          totalPages: number
+        @Field(type => Int)
+          currentPage: number
     }
+
     return PaginatedResponseClass
 }

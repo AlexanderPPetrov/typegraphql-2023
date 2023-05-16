@@ -28,14 +28,15 @@ type Mutation {
 scalar ObjectId
 
 type PaginatedUserResponse {
-  hasMore: Boolean!
-  items: [User!]!
+  currentPage: Int!
+  results: [User!]!
   total: Int!
+  totalPages: Int!
 }
 
 type Query {
   user(_id: ObjectId!): User!
-  users(page: Int!, perPage: Int!): PaginatedUserResponse!
+  users(currentPage: Int!, perPage: Int!): PaginatedUserResponse!
 }
 
 type User {

@@ -5,7 +5,6 @@ import { expressjwt as jwt } from 'express-jwt'
 import express from 'express'
 import http from 'http'
 import cors from 'cors'
-import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 
 import { getSchema } from './schema'
@@ -13,21 +12,13 @@ import geoip from 'geoip-lite'
 import MobileDetect from 'mobile-detect'
 import dotenv from 'dotenv'
 import { Context } from './types/context'
+import { connectToMongo } from './mongo'
 
 dotenv.config()
 
 const graphQlPath = process.env.GRAPHQL_PATH
-const port = process.env.PORT
-const dbUrl = process.env.MONGODB_URL
 
 
-mongoose.connect(dbUrl, {
-  autoIndex: true,
-}).then(() => {
-  console.log('connected to mongodb')
-}).catch((e) => {
-  console.log(e)
-})
 
 const auth = jwt({
   secret: process.env.JWT_SECRET,
@@ -66,7 +57,7 @@ async function startApolloServer() {
     bodyParser.json(),
     expressMiddleware(server, {
       context: async ({ req }) => {
-        const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
+        const ip = (req.headers['x-forwarded-for'] || req.socket.remoteAddress) as string
         const context: Context = {
           req,
           user: req.user,
@@ -78,8 +69,7 @@ async function startApolloServer() {
       },
     }),
   )
-  await new Promise<void>((resolve) => httpServer.listen({ port: 4000 }, resolve))
-  console.log('🚀 Server ready at http://localhost:4000/')
-
+  await new Promise<void>((resolve) => httpServer.listen({ port: process.env.PORT }, resolve))
+  await connectToMongo()
 }
-startApolloServer().then(r => console.log(r))
+startApolloServer().then(() => console.log('🚀 Server ready at http://localhost:4000/'))

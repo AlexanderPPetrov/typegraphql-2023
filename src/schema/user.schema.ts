@@ -24,7 +24,7 @@ export class User {
     @Field()
       lastName: string
 
-    @Prop({ required: true })
+    @Prop({ required: true, unique: true })
     @Field()
       email: string
 
