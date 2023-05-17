@@ -16,7 +16,7 @@ export class UserService {
   }
 
   async getUsers(paginationInput: PaginationInput) {
-    const userPaginationService = new PaginationService(User)
+    const userPaginationService = new PaginationService(UserModel)
     return userPaginationService.paginate(paginationInput)
   }
 
@@ -45,5 +45,12 @@ export class UserService {
     }
 
     return getToken(user._id, user.roles)
+  }
+
+  async currentUser(user: User) {
+    if(!user?._id) {
+      throw AppError('Unauthenticated user', ErrorCodes.UNAUTHENTICATED)
+    }
+    return UserModel.findById(user._id)
   }
 }

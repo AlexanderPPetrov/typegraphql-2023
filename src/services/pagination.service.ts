@@ -1,12 +1,11 @@
 import { ClassType } from 'type-graphql'
-import { getModelForClass  } from '@typegoose/typegoose'
 import { PaginationInput } from '../schema/pagination.schema'
 
 export class PaginationService<T> {
   private model: any
 
   constructor(model: ClassType<T>) {
-    this.model = getModelForClass(model)
+    this.model = model
   }
 
   async paginate({ page, limit }: PaginationInput) {

@@ -43,7 +43,6 @@ export class PaginatedUserResponse extends PaginatedResponse(User) {}
 
 export const UserModel = getModelForClass(User, { schemaOptions: { timestamps: true } })
 
-
 @InputType()
 export class CreateUserInput {
   @Field()
