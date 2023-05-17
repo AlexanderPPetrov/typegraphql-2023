@@ -1,10 +1,11 @@
-import { ClassType } from 'type-graphql'
 import { PaginationInput } from '../schema/pagination.schema'
+import { ReturnModelType } from '@typegoose/typegoose'
+import { ClassType } from 'type-graphql'
 
 export class PaginationService<T> {
-  private model: any
+  private model: ReturnModelType<ClassType<T>, unknown>
 
-  constructor(model: ClassType<T>) {
+  constructor(model: ReturnModelType<ClassType<T>, unknown>) {
     this.model = model
   }
 
