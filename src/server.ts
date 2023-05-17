@@ -18,7 +18,7 @@ dotenv.config()
 
 const graphQlPath = process.env.GRAPHQL_PATH
 
-
+//TODO: check i18next-fs-backend
 
 const auth = jwt({
   secret: process.env.JWT_SECRET,
@@ -70,6 +70,7 @@ async function startApolloServer() {
     }),
   )
   await new Promise<void>((resolve) => httpServer.listen({ port: process.env.PORT }, resolve))
+  console.log('🚀 Server ready at http://localhost:4000/')
   await connectToMongo()
 }
-startApolloServer().then(() => console.log('🚀 Server ready at http://localhost:4000/'))
+startApolloServer().catch((e) => console.log('cannot start server', e))

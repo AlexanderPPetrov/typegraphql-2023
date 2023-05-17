@@ -2,30 +2,29 @@ import { ArgsType, ClassType, Field, Int, ObjectType } from 'type-graphql'
 import { IsInt, IsPositive } from 'class-validator'
 @ArgsType()
 export class PaginationInput {
-    @Field(() => Int)
+    @Field(() => Int, { defaultValue: 1, nullable: true })
     @IsInt()
     @IsPositive()
-      currentPage: number
+      page?: number
 
-    @Field(() => Int)
+    @Field(() => Int, { defaultValue: 10, nullable: true })
     @IsInt()
     @IsPositive()
-      perPage: number
+      limit?: number
 }
 
 export default function PaginatedResponse<TItem>(TItemClass: ClassType<TItem>) {
     @ObjectType()
   abstract class PaginatedResponseClass {
         @Field(type => [TItemClass])
-          results: TItem[]
-
-        @Field(type => Int)
-          total: number
+          items: TItem[]
 
         @Field(type => Int)
           totalPages: number
         @Field(type => Int)
-          currentPage: number
+          totalItems: number
+        @Field(type => Int)
+          page: number
     }
 
     return PaginatedResponseClass

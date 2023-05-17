@@ -1,7 +1,11 @@
-import { CreateUserInput, EditUserInput, UserModel } from '../schema/user.schema'
+import { CreateUserInput, EditUserInput, User, UserModel } from '../schema/user.schema'
 import bcryptjs from 'bcryptjs'
 import { PaginationInput } from '../schema/pagination.schema'
 import { ObjectId } from 'mongodb'
+import { getToken } from '../utils/token'
+import { AppError } from '../utils/error'
+import { ErrorCodes } from '../constants/error-codes'
+import { PaginationService } from './pagination.service'
 
 
 export class UserService {
@@ -11,20 +15,9 @@ export class UserService {
     return UserModel.create(userData)
   }
 
-  async getUsers({ currentPage, perPage }: PaginationInput) {
-    const skipCount = (currentPage - 1) * perPage
-    const [total, results] = await Promise.all([
-      UserModel.countDocuments(),
-      UserModel.find({}).skip(skipCount).limit(perPage).lean(),
-    ])
-    const totalPages = Math.ceil(total / perPage)
-
-    return {
-      total,
-      results,
-      totalPages,
-      currentPage,
-    }
+  async getUsers(paginationInput: PaginationInput) {
+    const userPaginationService = new PaginationService(User)
+    return userPaginationService.paginate(paginationInput)
   }
 
   getUser(_id: ObjectId) {
@@ -40,4 +33,17 @@ export class UserService {
     return UserModel.findByIdAndUpdate(user._id, userData, { new: true })
   }
 
+  async login(email: string, password: string) {
+    const user = await UserModel.findOne({ email })
+    if(!user) {
+      throw AppError('Wrong email or password', ErrorCodes.BAD_USER_INPUT)
+    }
+    const isPasswordValid = await bcryptjs.compare(password, user.password)
+
+    if(!isPasswordValid) {
+      throw AppError('Wrong email or password', ErrorCodes.BAD_USER_INPUT)
+    }
+
+    return getToken(user._id, user.roles)
+  }
 }

@@ -3,7 +3,7 @@ import { UserResolver } from './resolvers/user.resolver'
 import { TypegooseMiddleware } from './typegoose-middleware'
 import { ObjectId } from 'mongodb'
 import { ObjectIdScalar } from './object-id.scalar'
-import { authChecker } from './resolvers/auth/auth-checker'
+import { authChecker } from './utils/auth-checker'
 
 import * as path from 'path'
 

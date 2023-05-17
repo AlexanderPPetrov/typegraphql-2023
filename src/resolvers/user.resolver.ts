@@ -1,9 +1,20 @@
 import { Resolver, Query, Mutation, Arg, Authorized, Args } from 'type-graphql'
-import { User, CreateUserInput, EditUserInput, PaginatedUserResponse } from '../schema/user.schema'
+import {
+  User,
+  CreateUserInput,
+  EditUserInput,
+  PaginatedUserResponse,
+  UserLoginArguments,
+  UserModel,
+} from '../schema/user.schema'
 import { UserRole } from '../enums/user-role'
 import { UserService } from '../services/user.service'
 import { PaginationInput } from '../schema/pagination.schema'
 import { ObjectId } from 'mongodb'
+import { GraphQLError } from 'graphql/index'
+import { ApolloServerErrorCode } from '@apollo/server/errors'
+import bcryptjs from 'bcryptjs'
+import { getToken } from '../utils/token'
 
 @Resolver()
 export class UserResolver {
@@ -39,4 +50,9 @@ export class UserResolver {
     return this.userService.updateUser(user)
   }
 
+
+  @Mutation(returns => String)
+  async login(@Args(){ email, password }: UserLoginArguments) {
+    return this.userService.login(email, password)
+  }
 }

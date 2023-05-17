@@ -6,7 +6,7 @@ import { User, UserModel } from '../schema/user.schema'
 import bcryptjs from 'bcryptjs'
 
 import { UserLoginArguments } from '../schema/user.schema'
-import { getToken } from './auth/token'
+import { getToken } from '../utils/token'
 import { Context } from '../types/context'
 @Resolver()
 export class AuthResolver {
