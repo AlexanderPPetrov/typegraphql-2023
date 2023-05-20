@@ -3,10 +3,32 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+input BaseUserInput {
+  firstName: String!
+  lastName: String!
+  occupation: String
+  password: String!
+}
+
+input CreateUserInput {
+  email: String!
+  firstName: String!
+  lastName: String!
+  occupation: String
+  password: String!
+}
+
+type Mutation {
+  createUser(user: CreateUserInput!): User!
+  deleteUser(_id: ObjectId!): User!
+  updateUser(_id: String!, user: BaseUserInput!): User!
+}
+
 """Mongo object id scalar type"""
 scalar ObjectId
 
 type Query {
+  user(_id: String!): User!
   users: [User!]!
 }
 
