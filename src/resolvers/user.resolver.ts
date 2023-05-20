@@ -1,7 +1,6 @@
 import { Resolver, Query, Arg, Args, Mutation } from 'type-graphql'
 import { UserService } from '../services/user.service'
 import { BaseUserInput, CreateUserInput, PaginatedUserResponse, User } from '../schema/user.schema'
-import { ObjectId } from 'mongodb'
 import { PaginationInput } from '../schema/pagination.schema'
 
 @Resolver()
@@ -27,7 +26,7 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
-  async deleteUser(@Arg('_id') _id: ObjectId):Promise<User> {
+  async deleteUser(@Arg('_id') _id: string):Promise<User> {
     return this.userService.deleteUser(_id)
   }
   @Mutation(() => User)

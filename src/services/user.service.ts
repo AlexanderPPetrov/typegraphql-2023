@@ -1,5 +1,4 @@
 import { BaseUserInput, CreateUserInput, UserModel } from '../schema/user.schema'
-import { ObjectId } from 'mongodb'
 import { PaginationInput } from '../schema/pagination.schema'
 import { PaginationService } from './pagination.service'
 
@@ -14,7 +13,7 @@ export class UserService {
   async createUser(user: CreateUserInput) {
     return UserModel.create(user)
   }
-  async deleteUser(_id: ObjectId) {
+  async deleteUser(_id: string) {
     return UserModel.findByIdAndRemove(_id)
   }
   async updateUser(_id: string, user: BaseUserInput) {

@@ -20,7 +20,7 @@ input CreateUserInput {
 
 type Mutation {
   createUser(user: CreateUserInput!): User!
-  deleteUser(_id: ObjectId!): User!
+  deleteUser(_id: String!): User!
   updateUser(_id: String!, user: BaseUserInput!): User!
 }
 
