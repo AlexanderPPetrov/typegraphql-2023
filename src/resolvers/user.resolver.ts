@@ -1,7 +1,8 @@
-import { Resolver, Query, Arg, Mutation } from 'type-graphql'
+import { Resolver, Query, Arg, Args, Mutation } from 'type-graphql'
 import { UserService } from '../services/user.service'
-import { BaseUserInput, CreateUserInput, User } from '../schema/user.schema'
+import { BaseUserInput, CreateUserInput, PaginatedUserResponse, User } from '../schema/user.schema'
 import { ObjectId } from 'mongodb'
+import { PaginationInput } from '../schema/pagination.schema'
 
 @Resolver()
 export class UserResolver {
@@ -10,9 +11,9 @@ export class UserResolver {
     this.userService = new UserService()
   }
 
-    @Query(() => [User])
-  async users():Promise<User[]> {
-    return this.userService.getUsers()
+    @Query(() => PaginatedUserResponse)
+  async users(@Args()paginatedInput: PaginationInput):Promise<PaginatedUserResponse> {
+    return this.userService.getUsers(paginatedInput)
   }
 
   @Query(() => User)

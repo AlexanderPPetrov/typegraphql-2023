@@ -1,9 +1,12 @@
 import { BaseUserInput, CreateUserInput, UserModel } from '../schema/user.schema'
 import { ObjectId } from 'mongodb'
+import { PaginationInput } from '../schema/pagination.schema'
+import { PaginationService } from './pagination.service'
 
 export class UserService {
-  async getUsers() {
-    return UserModel.find({}).lean()
+  async getUsers(paginatedInput: PaginationInput) {
+    const userPaginationServices = new PaginationService(UserModel)
+    return userPaginationServices.getPaginatedItems(paginatedInput)
   }
   async getUser(_id: string) {
     return UserModel.findById(_id).lean()

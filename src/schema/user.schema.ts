@@ -4,6 +4,7 @@ import { getModelForClass, prop as Prop } from '@typegoose/typegoose'
 import { UserRole } from '../enums/user-role'
 import { ObjectIdScalar } from '../object-id.scalar'
 import { IsEmail, MinLength, MaxLength } from 'class-validator'
+import PaginatedResponse from './pagination.schema'
 
 registerEnumType(UserRole, {
   name: 'UserRole',
@@ -58,3 +59,6 @@ export class CreateUserInput extends BaseUserInput {
   @IsEmail()
     email: string
 }
+
+@ObjectType()
+export class PaginatedUserResponse extends PaginatedResponse(User){}

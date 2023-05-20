@@ -27,9 +27,16 @@ type Mutation {
 """Mongo object id scalar type"""
 scalar ObjectId
 
+type PaginatedUserResponse {
+  items: [User!]!
+  page: Float!
+  totalItems: Float!
+  totalPages: Float!
+}
+
 type Query {
   user(_id: String!): User!
-  users: [User!]!
+  users(limit: Int = 20, page: Int! = 1): PaginatedUserResponse!
 }
 
 type User {
