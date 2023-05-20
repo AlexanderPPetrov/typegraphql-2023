@@ -3,6 +3,25 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+"""Mongo object id scalar type"""
+scalar ObjectId
+
 type Query {
-  helloWorld: String!
+  users: [User!]!
+}
+
+type User {
+  _id: ObjectId!
+  email: String!
+  firstName: String!
+  lastName: String!
+  occupation: String
+  password: String!
+  roles: [UserRole!]!
+}
+
+enum UserRole {
+  ADMIN
+  SUPER_ADMIN
+  USER
 }
