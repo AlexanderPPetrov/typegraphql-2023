@@ -1,6 +1,10 @@
 import { BaseUserInput, CreateUserInput, UserModel } from '../schema/user.schema'
 import { PaginationInput } from '../schema/pagination.schema'
 import { PaginationService } from './pagination.service'
+import { AppError } from '../utils/error'
+import { ErrorCodes } from '../constants/error-codes'
+import { getToken } from '../utils/token'
+import bcryptjs from 'bcryptjs'
 
 export class UserService {
   async getUsers(paginatedInput: PaginationInput) {
@@ -11,12 +15,27 @@ export class UserService {
     return UserModel.findById(_id).lean()
   }
   async createUser(user: CreateUserInput) {
-    return UserModel.create(user)
+    const password = bcryptjs.hashSync(user.password, 10)
+    const userData = { ...user, password }
+    const createdUser = await UserModel.create(userData)
+    return getToken(createdUser._id, createdUser.roles)
   }
   async deleteUser(_id: string) {
     return UserModel.findByIdAndRemove(_id)
   }
   async updateUser(_id: string, user: BaseUserInput) {
     return UserModel.findByIdAndUpdate(_id, user, { new: true })
+  }
+
+  async login(email: string, password: string) {
+    const user = await UserModel.findOne({ email }).lean()
+    if(!user) {
+      throw AppError('User not found', ErrorCodes.BAD_USER_INPUT)
+    }
+    const isMatching = await bcryptjs.compare(password, user.password)
+    if(!isMatching) {
+      throw AppError('User not found', ErrorCodes.BAD_USER_INPUT)
+    }
+    return getToken(user._id, user.roles)
   }
 }

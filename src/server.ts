@@ -5,7 +5,7 @@ import express from 'express'
 import http from 'http'
 import cors from 'cors'
 import bodyParser from 'body-parser'
-
+import jsonwebtoken from 'jsonwebtoken'
 import { getSchema } from './schema'
 import geoip from 'geoip-lite'
 import MobileDetect from 'mobile-detect'
@@ -18,7 +18,6 @@ dotenv.config()
 const graphQlPath = process.env.GRAPHQL_PATH
 
 //TODO: check i18next-fs-backend
-
 async function startApolloServer() {
 // Required logic for integrating with Express
   const app = express()
@@ -51,6 +50,7 @@ async function startApolloServer() {
     expressMiddleware(server, {
       context: async ({ req }) => {
         const ip = (req.headers['x-forwarded-for'] || req.socket.remoteAddress) as string
+
         const context: Context = {
           req,
           user: req.user,
@@ -61,6 +61,7 @@ async function startApolloServer() {
         return context
       },
     }),
+
   )
 
   await new Promise<void>((resolve) => httpServer.listen({ port: process.env.PORT }, resolve))

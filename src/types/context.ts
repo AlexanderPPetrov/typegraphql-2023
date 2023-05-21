@@ -1,8 +1,8 @@
 import { Request } from 'express'
-//TODO add User model definition
+import { User } from '../schema/user.schema'
 export interface Context {
     req: Request,
-    user: any,
+    user: User,
     ip: any,
     location: any,
     md: any,

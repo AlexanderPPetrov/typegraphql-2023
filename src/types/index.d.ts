@@ -1,6 +1,8 @@
-//TODO add User model definition
+import { User } from '../schema/user.schema'
+
 declare module 'express' {
+
     export interface Request {
-        user: any
+        user: User
     }
 }

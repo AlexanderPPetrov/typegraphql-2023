@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb'
-import { Field, InputType, ObjectType, registerEnumType } from 'type-graphql'
+import { ArgsType, Field, InputType, ObjectType, registerEnumType } from 'type-graphql'
 import { getModelForClass, prop as Prop } from '@typegoose/typegoose'
 import { UserRole } from '../enums/user-role'
 import { ObjectIdScalar } from '../object-id.scalar'
@@ -62,3 +62,13 @@ export class CreateUserInput extends BaseUserInput {
 
 @ObjectType()
 export class PaginatedUserResponse extends PaginatedResponse(User){}
+
+@ArgsType()
+export class UserLoginArgs {
+  @Field()
+  @IsEmail()
+    email: string
+  @MinLength(6)
+  @Field()
+    password: string
+}
