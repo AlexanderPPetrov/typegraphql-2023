@@ -12,6 +12,7 @@ import MobileDetect from 'mobile-detect'
 import dotenv from 'dotenv'
 import { Context } from './types/context'
 import { connectToMongo } from './mongo'
+import { getUserFromRequest } from './utils/token'
 
 dotenv.config()
 
@@ -50,10 +51,10 @@ async function startApolloServer() {
     expressMiddleware(server, {
       context: async ({ req }) => {
         const ip = (req.headers['x-forwarded-for'] || req.socket.remoteAddress) as string
-
+        const user = getUserFromRequest(req)
         const context: Context = {
           req,
-          user: req.user,
+          user,
           ip,
           location: geoip.lookup(ip),
           md: new MobileDetect(req.headers['user-agent']),

@@ -36,6 +36,7 @@ type PaginatedUserResponse {
 }
 
 type Query {
+  currentUser: User!
   user(_id: String!): User!
   users(limit: Int = 20, page: Int! = 1): PaginatedUserResponse!
 }

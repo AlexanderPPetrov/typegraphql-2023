@@ -1,9 +1,9 @@
-import { BaseUserInput, CreateUserInput, UserModel } from '../schema/user.schema'
+import { BaseUserInput, CreateUserInput, User, UserModel } from '../schema/user.schema'
 import { PaginationInput } from '../schema/pagination.schema'
 import { PaginationService } from './pagination.service'
 import { AppError } from '../utils/error'
 import { ErrorCodes } from '../constants/error-codes'
-import { getToken } from '../utils/token'
+import { generateToken } from '../utils/token'
 import bcryptjs from 'bcryptjs'
 
 export class UserService {
@@ -18,7 +18,7 @@ export class UserService {
     const password = bcryptjs.hashSync(user.password, 10)
     const userData = { ...user, password }
     const createdUser = await UserModel.create(userData)
-    return getToken(createdUser._id, createdUser.roles)
+    return generateToken(createdUser._id, createdUser.roles)
   }
   async deleteUser(_id: string) {
     return UserModel.findByIdAndRemove(_id)
@@ -36,6 +36,13 @@ export class UserService {
     if(!isMatching) {
       throw AppError('User not found', ErrorCodes.BAD_USER_INPUT)
     }
-    return getToken(user._id, user.roles)
+    return generateToken(user._id, user.roles)
+  }
+
+  async currentUser(user: User) {
+    if(!user?._id) {
+      throw AppError('Unauthenticated', ErrorCodes.UNAUTHENTICATED)
+    }
+    return UserModel.findById(user._id).lean()
   }
 }

@@ -1,8 +1,9 @@
-import { Resolver, Query, Arg, Args, Mutation, Authorized } from 'type-graphql'
+import { Resolver, Query, Arg, Args, Mutation, Authorized, Ctx } from 'type-graphql'
 import { UserService } from '../services/user.service'
 import { BaseUserInput, CreateUserInput, PaginatedUserResponse, User, UserLoginArgs } from '../schema/user.schema'
 import { PaginationInput } from '../schema/pagination.schema'
 import { UserRole } from '../enums/user-role'
+import { Context } from '../types/context'
 
 @Resolver()
 export class UserResolver {
@@ -37,8 +38,13 @@ export class UserResolver {
     return this.userService.updateUser(_id, user)
   }
 
-@Mutation(() => String)
+  @Mutation(() => String)
   async login(@Args() { email, password }: UserLoginArgs):Promise<string> {
     return this.userService.login(email, password)
+  }
+
+  @Query(() => User)
+  async currentUser(@Ctx(){ user }: Context): Promise<User> {
+    return this.userService.currentUser(user)
   }
 }
