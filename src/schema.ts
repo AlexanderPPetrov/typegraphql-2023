@@ -3,14 +3,12 @@ import { TypegooseMiddleware } from './typegoose-middleware'
 import { ObjectId } from 'mongodb'
 import { ObjectIdScalar } from './object-id.scalar'
 import * as path from 'path'
-import { UserResolver } from './resolvers/user.resolver'
+import { resolvers } from './resolvers'
 import { authChecker } from './utils/auth-checker'
 
-//TODO add resolves
-//TODO add authChecker
 export const getSchema = async () => {
   return await buildSchema({
-    resolvers: [UserResolver],
+    resolvers,
     emitSchemaFile: path.resolve(__dirname, 'schema.gql'),
     // use document converting middleware
     globalMiddlewares: [TypegooseMiddleware],

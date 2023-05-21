@@ -5,15 +5,13 @@ import { UserRole } from '../enums/user-role'
 import { ObjectIdScalar } from '../object-id.scalar'
 import { IsEmail, MinLength, MaxLength } from 'class-validator'
 import PaginatedResponse from './pagination.schema'
+import { BaseModel } from './model.schema'
 
 registerEnumType(UserRole, {
   name: 'UserRole',
 })
 @ObjectType()
-export class User {
-
-    @Field(() => ObjectIdScalar)
-  readonly _id: ObjectId
+export class User extends BaseModel {
 
     @Prop({ required: true })
     @Field()
