@@ -7,7 +7,7 @@ import cors from 'cors'
 import bodyParser from 'body-parser'
 import jsonwebtoken from 'jsonwebtoken'
 import { getSchema } from './schema'
-import geoip from 'geoip-lite'
+// import geoip from 'geoip-lite'
 import MobileDetect from 'mobile-detect'
 import dotenv from 'dotenv'
 import { Context } from './types/context'
@@ -56,7 +56,8 @@ async function startApolloServer() {
           req,
           user,
           ip,
-          location: geoip.lookup(ip),
+          // location: geoip.lookup(ip),
+          location: null,
           md: new MobileDetect(req.headers['user-agent']),
         }
         return context

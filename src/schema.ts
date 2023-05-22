@@ -7,9 +7,10 @@ import { resolvers } from './resolvers'
 import { authChecker } from './utils/auth-checker'
 
 export const getSchema = async () => {
+  const schemaPath = process.env.SCHEMA_PATH || ''
   return await buildSchema({
     resolvers,
-    emitSchemaFile: path.resolve(__dirname, 'schema.gql'),
+    emitSchemaFile: path.resolve(__dirname, `${schemaPath}schema.gql`),
     // use document converting middleware
     globalMiddlewares: [TypegooseMiddleware],
     // use ObjectId scalar mapping
