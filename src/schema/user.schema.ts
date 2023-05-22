@@ -1,8 +1,6 @@
-import { ObjectId } from 'mongodb'
 import { ArgsType, Field, InputType, ObjectType, registerEnumType } from 'type-graphql'
 import { getModelForClass, prop as Prop } from '@typegoose/typegoose'
 import { UserRole } from '../enums/user-role'
-import { ObjectIdScalar } from '../object-id.scalar'
 import { IsEmail, MinLength, MaxLength } from 'class-validator'
 import PaginatedResponse from './pagination.schema'
 import { BaseModel } from './model.schema'

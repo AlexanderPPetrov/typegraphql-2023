@@ -1,9 +1,9 @@
 import jsonwebtoken from 'jsonwebtoken'
 import { UserRole } from '../enums/user-role'
-import { ObjectId } from 'mongodb'
 import { Request } from 'express'
+import { Types } from 'mongoose'
 
-export function generateToken(_id: ObjectId, roles: UserRole[]) {
+export function generateToken(_id: Types.ObjectId, roles: UserRole[]) {
   return jsonwebtoken.sign(
     {
       _id,
