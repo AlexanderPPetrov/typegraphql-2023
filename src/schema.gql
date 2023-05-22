@@ -15,12 +15,14 @@ type Booking {
   bookingDate: DateTime!
   description: String!
   place: String!
+  user: User!
 }
 
 input BookingInput {
   bookingDate: DateTime!
   description: String!
   place: String!
+  user: ObjectId!
 }
 
 input CreateUserInput {

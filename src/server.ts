@@ -37,7 +37,6 @@ async function startApolloServer() {
       ApolloServerPluginDrainHttpServer({ httpServer }),
     ],
     introspection: true,
-
   })
 
   await server.start()

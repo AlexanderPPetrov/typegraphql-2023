@@ -1,4 +1,3 @@
-
 import jsonwebtoken from 'jsonwebtoken'
 import { UserRole } from '../enums/user-role'
 import { ObjectId } from 'mongodb'
@@ -22,7 +21,11 @@ export function getUserFromRequest(req: Request) {
   let user = null
   if(authorization) {
     const token = authorization.split(' ')[1]
-    user = jsonwebtoken.verify(token, process.env.JWT_SECRET) as any
+    try {
+      user = jsonwebtoken.verify(token, process.env.JWT_SECRET) as any
+    } catch (e) {
+      console.log(e?.message)
+    }
   }
   return user
 }
