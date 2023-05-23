@@ -4,7 +4,11 @@ import { BookingInput, BookingModel } from '../schema/booking.schema'
 
 export class BookingService {
   async getBookings(paginatedInput: PaginationInput) {
-    const userPaginationServices = new PaginationService(BookingModel, 'user')
+    const userPaginationServices = new PaginationService(
+      {
+        model: BookingModel ,
+        populate: 'user',
+      })
     return userPaginationServices.getPaginatedItems(paginatedInput)
   }
   async getBooking(_id: string) {

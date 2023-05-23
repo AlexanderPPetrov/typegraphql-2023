@@ -7,4 +7,9 @@ export class BaseModel {
 
     @Field(() => ObjectIdScalar)
   readonly _id: Types.ObjectId
+
+    @Field(() => Date)
+      createdAt: Date
+    @Field(() => Date)
+      updatedAt: Date
 }

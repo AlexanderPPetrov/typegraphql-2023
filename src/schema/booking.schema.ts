@@ -1,5 +1,5 @@
 import { Field, InputType, ObjectType } from 'type-graphql'
-import { BaseModel } from './model.schema'
+import { BaseModel } from './base-model.schema'
 import { getModelForClass, prop as Prop, Ref } from '@typegoose/typegoose'
 import PaginatedResponse from './pagination.schema'
 import { IsDate, MinLength } from 'class-validator'

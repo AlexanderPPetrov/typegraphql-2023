@@ -13,8 +13,10 @@ input BaseUserInput {
 type Booking {
   _id: ObjectId!
   bookingDate: DateTime!
+  createdAt: DateTime!
   description: String!
   place: String!
+  updatedAt: DateTime!
   user: User!
 }
 
@@ -75,12 +77,14 @@ type Query {
 
 type User {
   _id: ObjectId!
+  createdAt: DateTime!
   email: String!
   firstName: String!
   lastName: String!
   occupation: String
   password: String!
   roles: [UserRole!]!
+  updatedAt: DateTime!
 }
 
 enum UserRole {

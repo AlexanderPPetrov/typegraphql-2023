@@ -3,7 +3,7 @@ import { getModelForClass, prop as Prop } from '@typegoose/typegoose'
 import { UserRole } from '../enums/user-role'
 import { IsEmail, MinLength, MaxLength } from 'class-validator'
 import PaginatedResponse from './pagination.schema'
-import { BaseModel } from './model.schema'
+import { BaseModel } from './base-model.schema'
 
 registerEnumType(UserRole, {
   name: 'UserRole',
