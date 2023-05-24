@@ -4,9 +4,9 @@
 # -----------------------------------------------
 
 input BaseUserInput {
+  address: String
   firstName: String!
   lastName: String!
-  occupation: String
   password: String!
 }
 
@@ -28,10 +28,10 @@ input BookingInput {
 }
 
 input CreateUserInput {
+  address: String
   email: String!
   firstName: String!
   lastName: String!
-  occupation: String
   password: String!
 }
 
@@ -77,11 +77,11 @@ type Query {
 
 type User {
   _id: ObjectId!
+  address: String
   createdAt: DateTime!
   email: String!
   firstName: String!
   lastName: String!
-  occupation: String
   password: String!
   roles: [UserRole!]!
   updatedAt: DateTime!

@@ -25,7 +25,7 @@ export class User extends BaseModel {
       password: string
     @Prop()
     @Field({ nullable:true })
-      occupation?:string
+      address?:string
     @Prop({ type: [String], enum: UserRole, default: [UserRole.USER] })
   @Field(() => [UserRole])
       roles: UserRole[]
@@ -47,7 +47,7 @@ export class BaseUserInput {
   @MinLength(6)
     password: string
   @Field({ nullable:true })
-    occupation?:string
+    address?:string
 }
 @InputType()
 export class CreateUserInput extends BaseUserInput {
