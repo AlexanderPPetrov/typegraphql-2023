@@ -1,8 +1,6 @@
-import { ObjectId } from 'mongodb'
 import { ArgsType, Field, InputType, ObjectType, registerEnumType } from 'type-graphql'
 import { getModelForClass, prop as Prop } from '@typegoose/typegoose'
 import { UserRole } from '../enums/user-role'
-import { ObjectIdScalar } from '../object-id.scalar'
 import { IsEmail, MinLength, MaxLength } from 'class-validator'
 import PaginatedResponse from './pagination.schema'
 import { BaseModel } from './model.schema'
@@ -27,7 +25,7 @@ export class User extends BaseModel {
       password: string
     @Prop()
     @Field({ nullable:true })
-      occupation?:string
+      address?:string
     @Prop({ type: [String], enum: UserRole, default: [UserRole.USER] })
   @Field(() => [UserRole])
       roles: UserRole[]
@@ -49,7 +47,7 @@ export class BaseUserInput {
   @MinLength(6)
     password: string
   @Field({ nullable:true })
-    occupation?:string
+    address?:string
 }
 @InputType()
 export class CreateUserInput extends BaseUserInput {

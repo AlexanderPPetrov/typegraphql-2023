@@ -66,8 +66,10 @@ async function startApolloServer() {
 
   )
 
-  await new Promise<void>((resolve) => httpServer.listen({ port: process.env.PORT }, resolve))
-  console.log('🚀 Server ready at http://localhost:4000/')
+  const port = process.env.PORT || 4000
+
+  await new Promise<void>((resolve) => httpServer.listen({ port }, resolve))
+  console.log(`🚀 Server ready at http://localhost:${port}/`)
   await connectToMongo()
 }
 startApolloServer().catch((e) => console.log('cannot start server', e))
