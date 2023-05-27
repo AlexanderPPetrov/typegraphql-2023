@@ -42,8 +42,6 @@ export class BookingInput {
     @IsDate()
     @Field(() => Date)
       bookingDate: Date
-    @Field(() => ObjectIdScalar)
-      user: Types.ObjectId
 }
 
 @ObjectType()
