@@ -4,6 +4,6 @@ export interface Context {
     req: Request,
     user: User,
     ip: any,
-    location: any,
+    // location: any,
     md: any,
 }

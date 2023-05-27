@@ -7,7 +7,7 @@ import cors from 'cors'
 import bodyParser from 'body-parser'
 import jsonwebtoken from 'jsonwebtoken'
 import { getSchema } from './schema'
-import geoip from 'geoip-lite'
+// import geoip from 'geoip-lite'
 import MobileDetect from 'mobile-detect'
 import dotenv from 'dotenv'
 import { Context } from './types/context'
@@ -56,7 +56,7 @@ async function startApolloServer() {
           req,
           user,
           ip,
-          location: geoip.lookup(ip),
+          // location: geoip.lookup(ip),
           md: new MobileDetect(req.headers['user-agent']),
         }
         return context
@@ -65,8 +65,9 @@ async function startApolloServer() {
 
   )
 
-  await new Promise<void>((resolve) => httpServer.listen({ port: process.env.PORT }, resolve))
-  console.log('🚀 Server ready at http://localhost:4000/')
   await connectToMongo()
+  const port = process.env.PORT || 4000
+  await new Promise<void>((resolve) => httpServer.listen({ port }, resolve))
+  console.log(`🚀 Server ready at http://localhost:${port}/`)
 }
 startApolloServer().catch((e) => console.log('cannot start server', e))
