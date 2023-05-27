@@ -8,7 +8,8 @@ import bcryptjs from 'bcryptjs'
 
 export class UserService {
   async getUsers(paginatedInput: PaginationInput) {
-    const userPaginationServices = new PaginationService(UserModel)
+    const userPaginationServices =
+        new PaginationService({ model:  UserModel })
     return userPaginationServices.getPaginatedItems(paginatedInput)
   }
   async getUser(_id: string) {
