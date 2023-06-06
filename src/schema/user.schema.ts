@@ -1,11 +1,12 @@
 import { ObjectId } from 'mongodb'
 import { ArgsType, Field, InputType, ObjectType, registerEnumType } from 'type-graphql'
-import { getModelForClass, prop as Prop } from '@typegoose/typegoose'
+import { getModelForClass, prop as Prop, Ref } from '@typegoose/typegoose'
 import { UserRole } from '../enums/user-role'
 import { ObjectIdScalar } from '../object-id.scalar'
 import { IsEmail, MinLength, MaxLength } from 'class-validator'
 import PaginatedResponse from './pagination.schema'
 import { BaseModel } from './model.schema'
+import { Types } from 'mongoose'
 
 registerEnumType(UserRole, {
   name: 'UserRole',
@@ -30,7 +31,12 @@ export class User extends BaseModel {
       address?:string
     @Prop({ type: [String], enum: UserRole, default: [UserRole.USER] })
     @Field(() => [UserRole])
+
       roles: UserRole[]
+
+    @Prop({ ref: () => User })
+    @Field(() => [User], { nullable: true })
+      friends?: Ref<User, Types.ObjectId>[]
 }
 
 export const UserModel = getModelForClass(User,
@@ -50,6 +56,8 @@ export class BaseUserInput {
     password: string
   @Field({ nullable:true })
     address?:string
+    @Field(() => [ObjectIdScalar], { nullable:true })
+      friends?:Ref<User, Types.ObjectId>[]
 }
 @InputType()
 export class CreateUserInput extends BaseUserInput {
